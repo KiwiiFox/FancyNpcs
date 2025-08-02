@@ -40,6 +40,13 @@ public class DisplayNameCMDTest {
         expect(npc.getData().getDisplayName()).toEqual(displayName);
     }
 
+    @FPTest(name = "Set multiline display name")
+    public void setMultilineDisplayName(Player player) {
+        String input = "Line1|Line2";
+        expect(player.performCommand("npc displayname " + npcName + " " + input)).toBe(true);
+        expect(npc.getData().getDisplayName()).toEqual("Line1<newline>Line2");
+    }
+
     @FPTest(name = "Set display name to none")
     public void setDisplayNameToNone(Player player) {
         expect(player.performCommand("npc displayname " + npcName + " @none")).toBe(true);

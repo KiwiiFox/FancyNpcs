@@ -38,7 +38,12 @@ public enum DisplayNameCMD {
             final @NotNull @Argument(suggestions = "DisplayNameCMD/none") @Greedy String name
     ) {
         // Finalizing the name. In case input is '@none', it gets replaced with '<empty>' for backwards compatibility.
-        final String finalName = name.equalsIgnoreCase("@none") ? "<empty>" : name;
+        String finalName = name.equalsIgnoreCase("@none") ? "<empty>" : name;
+        // Allow using '|' or '\n' to create multiple lines in the display name by
+        // translating them to the MiniMessage <newline> tag before further processing.
+        finalName = finalName
+                .replace("\\n", "<newline>")
+                .replace("|", "<newline>");
         // Sending error message in case banned command has been found in the input.
         if (hasBlockedCommands(finalName)) {
             translator.translate("command_input_contains_blocked_command").send(sender);
